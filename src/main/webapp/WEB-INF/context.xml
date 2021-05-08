@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		
+		<context:component-scan base-package="project1"/>
+		
+		<mvc:annotation-driven/>
+		
+		<bean
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+			p:prefix="/views/"
+			p:suffix=".jsp">
+		
+		</bean>
+		
+		<bean id="dataSource"
+			class="com.mchange.v2.c3p0.ComboPooledDataSource"
+			p:driverClass="com.mysql.cj.jdbc.Driver"
+			p:jdbcUrl="jdbc:mysql://localhost:3306/project1"
+			p:user="root"
+			p:password="">
+		</bean>
+		
+		<bean id="sessionFactory"
+			class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+			p:dataSource-ref="dataSource"
+			p:packagesToScan="project1.entity"
+			p:configLocation="classpath:hibernate.cfg.xml">
+		</bean>
+		
+		<bean id="transactionManager"
+			class="org.springframework.orm.hibernate5.HibernateTransactionManager"
+			p:sessionFactory-ref="sessionFactory">
+		</bean>
+		
+		<tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>
